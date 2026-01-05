@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dynamic WhatsApp Due Diligence Journey</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+      background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+      padding:28px 18px;
+      min-height:100vh;
+      color:#fff;
+    }
+    .container{ max-width: 1400px; margin: 0 auto; }
+    h1{
+      text-align:center;
+      color:white;
+      margin: 6px 0 18px;
+      font-size: 30px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    .topbar{
+      display:flex;
+      gap:10px;
+      justify-content:space-between;
+      align-items:center;
+      margin: 0 auto 18px;
+      max-width: 1200px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.10);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.14);
+    }
+    .topbar .left{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.18);
+      color: rgba(255,255,255,0.92);
+      font-size: 13px;
+      line-height:1;
+      white-space:nowrap;
+    }
+    .pill strong{ color:#fff; font-weight:700; }
+    .control-btn{
+      border: none;
+      background: #00a884;
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform .12s ease, filter .12s ease;
+      box-shadow: 0 10px 22px rgba(0,168,132,0.22);
+    }
+    .control-btn:hover{ transform: translateY(-1px); filter: brightness(1.05); }
+    .control-btn.secondary{ background: rgba(255,255,255,0.14); box-shadow:none; }
+
+    .journey-grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+      gap: 22px;
+      align-items: start;
+      margin-top: 12px;
+    }
+    .phone-label{
+      text-align:center;
+      color:#fff;
+      font-weight:800;
+      margin-bottom:12px;
+      font-size:16px;
+      background: rgba(255,255,255,0.12);
+      padding: 10px 12px;
+      border-radius: 12px;
+    }
+    .phone-mockup{
+      background:#000;
+      border-radius:40px;
+      padding:12px;
+      box-shadow:0 20px 60px rgba(0,0,0,0.30);
+      margin:0 auto;
+      max-width:420px;
+    }
+    .screen{
+      background:#0a1014;
+      border-radius:28px;
+      overflow:hidden;
+      height: 760px;
+      display:flex;
+      flex-direction:column;
+    }
+    .status-bar{
+      background:#075e54;
+      color:#fff;
+      padding:8px 16px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      font-size:12px;
+    }
+    .chat-header{
+      background:#075e54;
+      color:#fff;
+      padding:12px 16px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .chat-header-avatar{
+      width:40px; height:40px;
+      border-radius:50%;
+      background:linear-gradient(135deg,#25D366,#128C7E);
+      display:flex; align-items:center; justify-content:center;
+      font-weight:800;
+      font-size:18px;
+      flex: 0 0 auto;
+    }
+    .chat-header-info{ flex:1; min-width: 0; }
+    .chat-header-name{ font-weight:700; font-size:16px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .chat-header-status{ font-size:12px; opacity:0.8; }
+
+    .chat-body{
+      flex:1;
+      background: #0a1014 url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="pattern" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse"><path d="M20 20 L40 40 M60 60 L80 80" stroke="rgba(255,255,255,0.03)" stroke-width="2" fill="none"/></pattern></defs><rect width="100" height="100" fill="url(%23pattern)"/></svg>');
+      padding: 16px;
+      overflow-y:auto;
+      scroll-behavior:smooth;
+    }
+
+    .message{ margin-bottom: 12px; display:flex; animation: slideIn .25s ease-out; }
+    @keyframes slideIn{ from{ opacity:0; transform: translateY(8px);} to{ opacity:1; transform: translateY(0);} }
+
+    .message-content{
+      max-width: 78%;
+      padding: 10px 14px;
+      border-radius: 8px;
+      position: relative;
+      word-wrap: break-word;
+    }
+    .message.user{ justify-content:flex-end; }
+    .message.user .message-content{
+      background:#005c4b;
+      color:#fff;
+      border-bottom-right-radius:2px;
+    }
+    .message.system{ justify-content:flex-start; }
+    .message.system .message-content{
+      background:#1f2c34;
+      color:#e9edef;
+      border-bottom-left-radius:2px;
+    }
+    .message-time{
+      font-size: 10px;
+      opacity: 0.6;
+      margin-top: 6px;
+      text-align:right;
+    }
+
+    .divider{ height:1px; background:#2a3942; margin: 14px 0; }
+    .step-indicator{
+      background: rgba(0,168,132,0.18);
+      color:#00a884;
+      padding: 6px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 800;
+      display:inline-block;
+      margin-bottom: 8px;
+    }
+    .section-title{
+      color:#00a884;
+      font-weight:800;
+      margin: 16px 0 8px;
+      font-size: 12px;
+      text-transform:uppercase;
+      letter-spacing: .6px;
+    }
+
+    .button-group{ display:flex; flex-direction:column; gap:8px; margin-top:12px; }
+    .whatsapp-button{
+      background:#00a884;
+      color:white;
+      border:none;
+      padding:12px 20px;
+      border-radius:24px;
+      font-weight:800;
+      cursor:pointer;
+      transition: transform .12s ease, filter .12s ease;
+      text-align:center;
+      font-size: 14px;
+    }
+    .whatsapp-button:hover{ transform: scale(1.02); filter: brightness(1.05); }
+    .whatsapp-button.secondary{ background:#233138; color:#00a884; }
+
+    .input-field{
+      background:#1f2c34;
+      border: 1px solid #2a3942;
+      color:#fff;
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 8px;
+      width:100%;
+      font-size: 14px;
+      outline:none;
+    }
+    .input-field::placeholder{ color:#8696a0; }
+    .field-label{ color:#8696a0; font-size: 12px; display:block; margin-top: 12px; }
+    .hint{ color:#8696a0; font-size: 12px; margin-top: 8px; line-height: 1.5; }
+
+    .radio-group{ margin-top: 10px; }
+    .radio-option{
+      background:#1f2c34;
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 8px;
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      cursor:pointer;
+      transition: background .12s ease;
+      user-select:none;
+    }
+    .radio-option:hover{ background:#2a3942; }
+    .radio-circle{
+      width:20px; height:20px;
+      border: 2px solid #00a884;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex: 0 0 auto;
+    }
+    .radio-circle.selected::after{
+      content:'';
+      width: 12px; height: 12px;
+      background:#00a884;
+      border-radius:50%;
+    }
+
+    .success-box{
+      background:#1a3a2e;
+      border-left: 4px solid #00a884;
+      padding: 12px;
+      border-radius: 4px;
+      color:#00e676;
+      font-size: 13px;
+      line-height:1.45;
+    }
+    .warning-box{
+      background:#2a2a2a;
+      border-left: 4px solid #ff9800;
+      padding: 12px;
+      border-radius: 4px;
+      color:#ffc107;
+      font-size: 13px;
+      line-height:1.45;
+      margin-top: 12px;
+    }
+
+    .steps-list{
+      background:#1f2c34;
+      border-radius: 8px;
+      padding: 12px;
+      margin-top: 12px;
+    }
+    .step-item{ padding: 6px 0; color:#e9edef; font-size: 13px; line-height:1.6; }
+
+    .qr-code{
+      background:#fff;
+      padding: 18px;
+      border-radius: 12px;
+      margin: 14px 0 6px;
+      text-align:center;
+      color:#111;
+    }
+    .qr-placeholder{
+      width: 180px; height: 180px;
+      margin: 0 auto;
+      background: linear-gradient(45deg,#e0e0e0 25%,transparent 25%,transparent 75%,#e0e0e0 75%,#e0e0e0),
+                  linear-gradient(45deg,#e0e0e0 25%,transparent 25%,transparent 75%,#e0e0e0 75%,#e0e0e0);
+      background-size: 20px 20px;
+      background-position: 0 0, 10px 10px;
+      border: 3px solid #333;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight: 900;
+      color:#666;
+      border-radius: 10px;
+    }
+
+    .typing-indicator{
+      display:flex;
+      gap:4px;
+      padding: 10px 14px;
+      background:#1f2c34;
+      border-radius: 8px;
+      width: fit-content;
+      align-items:center;
+    }
+    .typing-dot{
+      width:8px; height:8px;
+      background:#8696a0;
+      border-radius:50%;
+      animation: typing 1.4s infinite;
+    }
+    .typing-dot:nth-child(2){ animation-delay: .2s;}
+    .typing-dot:nth-child(3){ animation-delay: .4s;}
+    @keyframes typing{ 0%,60%,100%{ transform: translateY(0);} 30%{ transform: translateY(-8px);} }
+
+    .report-link{
+      background: linear-gradient(135deg,#00a884,#06cf9c);
+      color:#fff;
+      padding: 14px;
+      border-radius: 8px;
+      text-align:center;
+      margin-top: 12px;
+      font-weight: 900;
+      cursor:pointer;
+      transition: transform .12s ease, box-shadow .12s ease;
+    }
+    .report-link:hover{ transform: scale(1.02); box-shadow: 0 6px 16px rgba(0,168,132,0.22); }
+
+    .fee{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      margin-top: 10px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      font-size: 12px;
+      color: rgba(255,255,255,0.92);
+    }
+
+    .composer{
+      background:#111b21;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 10px 12px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+    .composer input{
+      flex:1;
+      background:#1f2c34;
+      border: 1px solid #2a3942;
+      color:#fff;
+      padding: 10px 12px;
+      border-radius: 999px;
+      outline:none;
+      font-size: 14px;
+    }
+    .composer button{
+      border:none;
+      background:#00a884;
+      color:#fff;
+      border-radius: 999px;
+      width: 42px;
+      height: 42px;
+      cursor:pointer;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .backdrop{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 18px;
+      z-index: 50;
+    }
+    .modal{
+      width: min(760px, 96vw);
+      background: #0b141a;
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 18px;
+      box-shadow: 0 24px 70px rgba(0,0,0,0.50);
+      overflow:hidden;
+    }
+    .modal-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding: 14px 16px;
+      background: rgba(255,255,255,0.06);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .modal-header h3{ font-size: 16px; }
+    .close{
+      border:none;
+      background: rgba(255,255,255,0.14);
+      color:#fff;
+      padding: 8px 10px;
+      border-radius: 10px;
+      cursor:pointer;
+      font-weight: 800;
+    }
+    .modal-body{ padding: 16px; color: rgba(255,255,255,0.92); }
+    .report-grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .report-card{
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 14px;
+      padding: 12px;
+    }
+    .report-card h4{ font-size: 13px; margin-bottom: 6px; color:#00e676; }
+    .report-card p{ font-size: 13px; line-height: 1.45; color: rgba(255,255,255,0.88); }
+    .tag{
+      display:inline-block;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      margin-top: 8px;
+      background: rgba(0,168,132,0.18);
+      color:#00a884;
+    }
+    .muted{ opacity: 0.82; }
+    @media (max-width: 900px){ .journey-grid{ grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📱 Dynamic WhatsApp Due Diligence Journey</h1>
+
+    <div class="topbar">
+      <div class="left">
+        <div class="pill">Requester inputs: <strong>Phone only</strong></div>
+        <div class="pill">Options: <strong>Full DD</strong> vs <strong>Limited DD</strong></div>
+        <div class="pill">Purpose: <strong>kept same</strong></div>
+      </div>
+      <div class="right" style="display:flex; gap:10px; align-items:center;">
+        <button class="control-btn secondary" id="autoplayBtn" title="Auto-walkthrough">▶ Auto-play</button>
+        <button class="control-btn" id="resetBtn" title="Reset the journey">↻ Reset</button>
+      </div>
+    </div>
+
+    <div class="journey-grid">
+      <div>
+        <div class="phone-label">Requester (Initiator)</div>
+        <div class="phone-mockup">
+          <div class="screen">
+            <div class="status-bar">
+              <span id="reqTime">9:41</span>
+              <span>●●●●● 5G 100%</span>
+            </div>
+            <div class="chat-header">
+              <div class="chat-header-avatar">D</div>
+              <div class="chat-header-info">
+                <div class="chat-header-name">Due Diligence</div>
+                <div class="chat-header-status" id="reqStatus">Online</div>
+              </div>
+            </div>
+            <div class="chat-body" id="reqChat"></div>
+            <div class="composer">
+              <input id="reqComposer" placeholder="Type a message…" />
+              <button id="reqSend" title="Send">➤</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="phone-label">Submitter (Counterparty)</div>
+        <div class="phone-mockup">
+          <div class="screen">
+            <div class="status-bar">
+              <span id="subTime">9:45</span>
+              <span>●●●●● 5G 100%</span>
+            </div>
+            <div class="chat-header">
+              <div class="chat-header-avatar">D</div>
+              <div class="chat-header-info">
+                <div class="chat-header-name">Due Diligence</div>
+                <div class="chat-header-status" id="subStatus">Online</div>
+              </div>
+            </div>
+            <div class="chat-body" id="subChat"></div>
+            <div class="composer">
+              <input id="subComposer" placeholder="Type a message…" />
+              <button id="subSend" title="Send">➤</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Report Modal -->
+  <div class="backdrop" id="backdrop">
+    <div class="modal" role="dialog" aria-modal="true">
+      <div class="modal-header">
+        <h3>📄 Due Diligence Report</h3>
+        <button class="close" id="closeModal">✕</button>
+      </div>
+      <div class="modal-body" id="reportBody"></div>
+    </div>
+  </div>
+
+  <script>
+    const state = {
+      requester: {
+        stage: "INIT",
+        data: {
+          ddOption: "",
+          purpose: "Employment",
+          // requester
+          requesterPhone:"",
+          // submitter routing (Full DD)
+          submitterName:"",
+          submitterPhone:"",
+          // Full-DD submitter entered
+          submitterEmail:"",
+          submitterPAN:"",
+          // Limited-DD subject details (provided by requester)
+          subjectName:"",
+          subjectPhone:"",
+          subjectEmail:"",
+          subjectDOB:"",
+          subjectPAN:"",
+          subjectPassport:"",
+          subjectDL:""
+        },
+        messages: []
+      },
+      submitter: {
+        stage: "IDLE",
+        messages: []
+      },
+      autoplay: false,
+    };
+
+    const reqChat = document.getElementById("reqChat");
+    const subChat = document.getElementById("subChat");
+    const reqComposer = document.getElementById("reqComposer");
+    const subComposer = document.getElementById("subComposer");
+    const reqSend = document.getElementById("reqSend");
+    const subSend = document.getElementById("subSend");
+    const reqStatus = document.getElementById("reqStatus");
+    const subStatus = document.getElementById("subStatus");
+    const backdrop = document.getElementById("backdrop");
+    const reportBody = document.getElementById("reportBody");
+
+    function nowTime(){
+      const d = new Date();
+      let h = d.getHours();
+      let m = d.getMinutes();
+      const ampm = h >= 12 ? "PM" : "AM";
+      h = h % 12; if(h === 0) h = 12;
+      const mm = String(m).padStart(2,"0");
+      return `${h}:${mm} ${ampm}`;
+    }
+    function scrollToBottom(el){ el.scrollTop = el.scrollHeight; }
+    function msgHtml({from, html, time}){
+      return `
+        <div class="message ${from}">
+          <div class="message-content">
+            ${html}
+            <div class="message-time">${time || nowTime()}</div>
+          </div>
+        </div>
+      `;
+    }
+    function typingHtml(){
+      return `
+        <div class="message system" data-typing="1">
+          <div class="typing-indicator">
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+          </div>
+        </div>
+      `;
+    }
+
+    function addMessage(who, from, html, time){
+      const bucket = who === "requester" ? state.requester.messages : state.submitter.messages;
+      bucket.push({from, html, time: time || nowTime()});
+      render();
+    }
+
+    function setOnline(who, online){
+      const el = who === "requester" ? reqStatus : subStatus;
+      el.textContent = online ? "Online" : "Typing…";
+    }
+
+    function showTyping(who){
+      const el = who === "requester" ? reqChat : subChat;
+      [...el.querySelectorAll('[data-typing="1"]')].forEach(n => n.remove());
+      el.insertAdjacentHTML("beforeend", typingHtml());
+      scrollToBottom(el);
+    }
+    function hideTyping(who){
+      const el = who === "requester" ? reqChat : subChat;
+      [...el.querySelectorAll('[data-typing="1"]')].forEach(n => n.remove());
+    }
+
+    function render(){
+      reqChat.innerHTML = state.requester.messages.map(msgHtml).join("");
+      subChat.innerHTML = state.submitter.messages.map(msgHtml).join("");
+      scrollToBottom(reqChat);
+      scrollToBottom(subChat);
+    }
+
+    function resetJourney(){
+      state.requester.stage = "INIT";
+      state.submitter.stage = "IDLE";
+      state.requester.data = {
+        ddOption: "",
+        purpose: "Employment",
+        requesterPhone:"",
+        submitterName:"",
+        submitterPhone:"",
+        submitterEmail:"",
+        submitterPAN:"",
+        subjectName:"",
+        subjectPhone:"",
+        subjectEmail:"",
+        subjectDOB:"",
+        subjectPAN:"",
+        subjectPassport:"",
+        subjectDL:""
+      };
+      state.requester.messages = [];
+      state.submitter.messages = [];
+      state.autoplay = false;
+      document.getElementById("autoplayBtn").textContent = "▶ Auto-play";
+      seed();
+    }
+
+    function seed(){
+      addMessage("requester","user","Hi");
+      addMessage("requester","system",`
+        👋 Welcome to the <strong>Due Diligence service</strong>.
+        <div class="divider"></div>
+        Please select your option to continue:
+        <div class="button-group">
+          <button class="whatsapp-button" data-action="pick_dd" data-value="FULL">✅ Full Due Diligence</button>
+          <button class="whatsapp-button secondary" data-action="pick_dd" data-value="LIMITED">⚡ Limited Due Diligence</button>
+        </div>
+      `);
+
+      addMessage("submitter","system",`
+        <div class="success-box">
+          ✅ <strong>No action right now.</strong><br><br>
+          If you are selected as a counterparty (Full DD), you'll receive a consent request here.
+        </div>
+      `);
+    }
+
+    function showDDInfo(dd){
+      const fees = "XXX";
+      if(dd === "FULL"){
+        return `
+          <div class="step-indicator">OPTION SELECTED</div>
+          <strong>Full Due Diligence</strong><br>
+          Counterparty <strong>will be asked</strong> for information to achieve:
+          <div class="steps-list">
+            <div class="step-item">✓ Establish Identity with Aadhaar (Face Auth)</div>
+            <div class="step-item">✓ Watchlist check against 149 sources</div>
+            <div class="step-item">✓ Internet Due Diligence</div>
+            <div class="step-item">✓ Court Orders</div>
+            <div class="step-item">✓ Credit Due Diligence</div>
+          </div>
+          <div class="fee">Fees: <strong>${fees}</strong></div>
+        `;
+      }
+      return `
+        <div class="step-indicator">OPTION SELECTED</div>
+        <strong>Limited Due Diligence</strong><br>
+        Counterparty <strong>will NOT be asked</strong> for information. Checks include:
+        <div class="steps-list">
+          <div class="step-item">✓ Watchlist check against 149 sources</div>
+          <div class="step-item">✓ Internet Due Diligence</div>
+          <div class="step-item">✓ Court Orders</div>
+        </div>
+        <div class="fee">Fees: <strong>${fees}</strong></div>
+      `;
+    }
+
+    function showDetailsForm(){
+      state.requester.stage = "DETAILS";
+      const dd = state.requester.data.ddOption;
+
+      // FULL: requester only enters phone; plus submitter routing info
+      if(dd === "FULL"){
+        addMessage("requester","system",`
+          <div class="step-indicator">STEP 1 OF 4</div>
+          ${showDDInfo("FULL")}
+          <div class="divider"></div>
+
+          <div class="section-title">Requester</div>
+          <label class="field-label">Your Mobile Number</label>
+          <input class="input-field" id="req_phone" placeholder="e.g. +91 98765 43210" value="${escapeHtml(state.requester.data.requesterPhone)}" />
+
+          <div class="section-title">Counterparty (Submitter) Details</div>
+          <label class="field-label">Submitter Full Name</label>
+          <input class="input-field" id="sub_name" placeholder="Enter counterparty full name" value="${escapeHtml(state.requester.data.submitterName)}" />
+          <label class="field-label">Submitter WhatsApp Number</label>
+          <input class="input-field" id="sub_phone" placeholder="e.g. +91 87654 32109" value="${escapeHtml(state.requester.data.submitterPhone)}" />
+
+          <div class="hint">They will be asked for consent + Email + PAN + Aadhaar face authentication.</div>
+
+          <div class="button-group">
+            <button class="whatsapp-button" data-action="req_to_purpose_full">➡️ Continue</button>
+            <button class="whatsapp-button secondary" data-action="req_cancel">Cancel</button>
+          </div>
+        `);
+        return;
+      }
+
+      // LIMITED: requester phone + subject details
+      addMessage("requester","system",`
+        <div class="step-indicator">STEP 1 OF 3</div>
+        ${showDDInfo("LIMITED")}
+        <div class="divider"></div>
+
+        <div class="section-title">Requester</div>
+        <label class="field-label">Your Mobile Number</label>
+        <input class="input-field" id="req_phone" placeholder="e.g. +91 98765 43210" value="${escapeHtml(state.requester.data.requesterPhone)}" />
+
+        <div class="section-title">Subject Details (Provided by Requester)</div>
+        <label class="field-label">Full Name</label>
+        <input class="input-field" id="subject_name" placeholder="Name" value="${escapeHtml(state.requester.data.subjectName)}" />
+
+        <label class="field-label">Phone</label>
+        <input class="input-field" id="subject_phone" placeholder="Phone" value="${escapeHtml(state.requester.data.subjectPhone)}" />
+
+        <label class="field-label">Email</label>
+        <input class="input-field" id="subject_email" placeholder="Email" value="${escapeHtml(state.requester.data.subjectEmail)}" />
+
+        <label class="field-label">Date of Birth</label>
+        <input class="input-field" id="subject_dob" placeholder="YYYY-MM-DD" value="${escapeHtml(state.requester.data.subjectDOB)}" />
+
+        <label class="field-label">PAN</label>
+        <input class="input-field" id="subject_pan" placeholder="ABCDE1234F" value="${escapeHtml(state.requester.data.subjectPAN)}" />
+
+        <label class="field-label">Passport (optional)</label>
+        <input class="input-field" id="subject_passport" placeholder="Passport No." value="${escapeHtml(state.requester.data.subjectPassport)}" />
+
+        <label class="field-label">Driving License (optional)</label>
+        <input class="input-field" id="subject_dl" placeholder="DL No." value="${escapeHtml(state.requester.data.subjectDL)}" />
+
+        <div class="hint">No counterparty consent needed in Limited DD (demo behavior).</div>
+
+        <div class="button-group">
+          <button class="whatsapp-button" data-action="req_to_purpose_limited">➡️ Continue</button>
+          <button class="whatsapp-button secondary" data-action="req_cancel">Cancel</button>
+        </div>
+      `);
+    }
+
+    function showPurposePicker(){
+      state.requester.stage = "PURPOSE";
+      const purposes = ["Employment","Hiring Someone","Service / Vendor Work","Business Relationship","Other"];
+      const selected = state.requester.data.purpose;
+      const stepTotal = state.requester.data.ddOption === "FULL" ? "STEP 2 OF 4" : "STEP 2 OF 3";
+
+      addMessage("requester","system",`
+        <div class="step-indicator">${stepTotal}</div>
+        <div class="section-title">Purpose of Verification</div>
+        Please select the purpose of verification:
+        <div class="radio-group">
+          ${purposes.map(p => `
+            <div class="radio-option" data-action="req_pick_purpose" data-value="${escapeAttr(p)}">
+              <div class="radio-circle ${p===selected ? "selected":""}"></div>
+              <span>${escapeHtml(p)}</span>
+            </div>
+          `).join("")}
+        </div>
+        <div class="button-group">
+          <button class="whatsapp-button" data-action="req_submit">➡️ Submit</button>
+          <button class="whatsapp-button secondary" data-action="req_back_to_details">← Back</button>
+        </div>
+      `);
+    }
+
+    function requesterWaiting(){
+      state.requester.stage = "WAITING";
+      const dd = state.requester.data.ddOption;
+      const msg = dd === "FULL"
+        ? `✅ Thank you. The counterparty will be notified to provide consent and complete verification.`
+        : `✅ Thank you. We will run checks based on the details provided.`;
+      addMessage("requester","system",`
+        <div class="success-box">${msg}</div>
+        <div class="divider"></div>
+        ⏳ <em>Processing…</em>
+      `);
+    }
+
+    function requesterDeclined(){
+      state.requester.stage = "DECLINED";
+      addMessage("requester","system",`
+        <div class="warning-box">
+          ❌ <strong>Consent declined.</strong><br><br>
+          The counterparty did not approve the request.
+        </div>
+        <div class="button-group">
+          <button class="whatsapp-button" data-action="req_restart">↻ Start New Request</button>
+        </div>
+      `);
+    }
+
+    function requesterComplete(){
+      state.requester.stage = "COMPLETE";
+      const s = state.requester.data;
+      const dd = s.ddOption;
+
+      const reportItems = dd === "FULL"
+        ? `
+          <div class="step-item">✓ Aadhaar Face Authentication (counterparty)</div>
+          <div class="step-item">✓ Watchlist Screening (149 sources)</div>
+          <div class="step-item">✓ Internet Due Diligence</div>
+          <div class="step-item">✓ Court Orders</div>
+          <div class="step-item">✓ Credit Due Diligence</div>
+        `
+        : `
+          <div class="step-item">✓ Watchlist Screening (149 sources)</div>
+          <div class="step-item">✓ Internet Due Diligence</div>
+          <div class="step-item">✓ Court Orders</div>
+        `;
+
+      const subjectLabel = dd === "FULL"
+        ? (s.submitterName || "Counterparty")
+        : (s.subjectName || "Subject");
+
+      addMessage("requester","system",`
+        <div class="success-box">
+          ✅ <strong>Due Diligence Complete!</strong>
+        </div>
+        <br>
+        Report for <strong>${escapeHtml(subjectLabel)}</strong> is now ready.
+        <div class="divider"></div>
+        📊 <strong>Report includes:</strong>
+        <div class="steps-list">${reportItems}</div>
+        <div class="report-link" data-action="open_report">📄 Access Full Report</div>
+      `);
+    }
+
+    /* -----------------------------
+       Submitter flow (Full DD)
+    ------------------------------*/
+    function notifySubmitterConsent(){
+      state.submitter.stage = "CONSENT";
+      const s = state.requester.data;
+      const requesterDisplay = s.requesterPhone ? `Requester (${escapeHtml(s.requesterPhone)})` : "A requester";
+
+      if(state.submitter.messages.length === 1){ state.submitter.messages = []; }
+
+      addMessage("submitter","system",`
+        👋 Hi <strong>${escapeHtml(s.submitterName || "there")}</strong>,
+        <br><br>
+        <strong>${requesterDisplay}</strong> wants to perform <strong>Full Due Diligence</strong> for <strong>${escapeHtml(s.purpose)}</strong>.
+        <div class="divider"></div>
+        Please provide your consent to proceed:
+        <div class="button-group">
+          <button class="whatsapp-button" data-action="sub_consent_yes">✅ Yes - Give Consent</button>
+          <button class="whatsapp-button secondary" data-action="sub_consent_no">❌ No - Decline</button>
+        </div>
+      `);
+    }
+
+    function showSubmitterDetailsForm(){
+      state.submitter.stage = "SUBMITTER_DETAILS";
+      addMessage("submitter","system",`
+        <div class="step-indicator">STEP 1 OF 3</div>
+        Please provide the following details (required for Full DD):
+        <div class="divider"></div>
+
+        <label class="field-label">Email Address</label>
+        <input class="input-field" id="sub_email" placeholder="name@example.com" value="${escapeHtml(state.requester.data.submitterEmail)}" />
+
+        <label class="field-label">PAN</label>
+        <input class="input-field" id="sub_pan" placeholder="ABCDE1234F" value="${escapeHtml(state.requester.data.submitterPAN)}" />
+
+        <div class="button-group">
+          <button class="whatsapp-button" data-action="sub_save_details">➡️ Continue to Aadhaar Face Auth</button>
+        </div>
+      `);
+    }
+
+    function showAadhaarInstructions(){
+      state.submitter.stage = "AADHAAR";
+      addMessage("submitter","system",`
+        <div class="step-indicator">STEP 2 OF 3</div>
+        📱 To establish identity, please use the <strong>Aadhaar App (UIDAI)</strong> for Face Authentication:
+        <div class="divider"></div>
+        • Android: <span class="muted">(Play Store Link)</span><br>
+        • iOS: <span class="muted">(App Store Link)</span>
+        <br><br>
+        Or reply <strong>"I already have"</strong> (or tap below) if installed.
+        <div class="button-group">
+          <button class="whatsapp-button" data-action="sub_already_have">✅ I already have</button>
+        </div>
+      `);
+    }
+
+    function showQRStep(){
+      state.submitter.stage = "QR";
+      addMessage("submitter","system",`
+        <div class="step-indicator">STEP 3 OF 3</div>
+        <strong>📋 Follow these steps:</strong>
+        <div class="steps-list">
+          <div class="step-item">1️⃣ Open Aadhaar App</div>
+          <div class="step-item">2️⃣ Tap "Scan QR Code"</div>
+          <div class="step-item">3️⃣ Scan the QR code below</div>
+          <div class="step-item">4️⃣ Complete Face Authentication (blink)</div>
+        </div>
+        <div class="qr-code">
+          <div class="qr-placeholder"><span style="font-size: 22px;">📷<br>QR CODE</span></div>
+        </div>
+        <div class="warning-box">
+          ⚠️ <strong>Important:</strong> Do not share this QR code with anyone.
+        </div>
+        <div class="button-group">
+          <button class="whatsapp-button" data-action="sub_done">✅ I've completed verification</button>
+          <button class="whatsapp-button secondary" data-action="sub_cancel">Cancel</button>
+        </div>
+      `);
+    }
+
+    function submitterDeclined(){
+      state.submitter.stage = "DECLINED";
+      addMessage("submitter","system",`
+        <div class="warning-box">
+          ❌ You declined the request.<br><br>
+          No further action is required.
+        </div>
+      `);
+    }
+
+    function submitterDone(){
+      state.submitter.stage = "DONE";
+      addMessage("submitter","system",`
+        <div class="success-box">
+          ✅ <strong>Thanks!</strong><br><br>
+          Your details have been submitted. You can close this chat.
+        </div>
+      `);
+    }
+
+    /* -----------------------------
+       Validation + helpers
+    ------------------------------*/
+    function normalizePhone(p){ return (p || "").trim().replace(/\s+/g," "); }
+    function isValidPhone(p){
+      const cleaned = (p || "").replace(/\s+/g,"");
+      return cleaned.length >= 8 && cleaned.length <= 16 && /^[+0-9]+$/.test(cleaned);
+    }
+    function isValidEmail(e){
+      const s = (e || "").trim();
+      return !!s && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
+    }
+    function isValidPAN(p){
+      const s = (p || "").trim().toUpperCase();
+      return /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(s);
+    }
+    function isValidDOB(d){
+      const s = (d || "").trim();
+      if(!s) return false;
+      if(!/^\d{4}-\d{2}-\d{2}$/.test(s)) return false;
+      const dt = new Date(s+"T00:00:00");
+      return !isNaN(dt.getTime());
+    }
+    function escapeHtml(s){
+      return String(s || "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#39;");
+    }
+    function escapeAttr(s){ return escapeHtml(s).replaceAll('"',"&quot;"); }
+
+    function openReport(){
+      const dd = state.requester.data.ddOption;
+      const isFull = dd === "FULL";
+      const cards = isFull ? [
+        {t:"Aadhaar Face Auth", d:"Counterparty identity established via Aadhaar App face authentication.", tag:"VERIFIED"},
+        {t:"Watchlist (149 sources)", d:"Screening across 149 sources; matches (if any) listed with confidence.", tag:"COMPLETED"},
+        {t:"Internet Due Diligence", d:"Open web presence scan + key flags summary.", tag:"COMPLETED"},
+        {t:"Court Orders", d:"Court order data queried; results summarized.", tag:"COMPLETED"},
+        {t:"Credit Due Diligence", d:"Credit/DD module run where applicable (demo).", tag:"COMPLETED"},
+        {t:"Audit Trail", d:"Consent timestamp + step logs captured.", tag:"LOGGED"},
+      ] : [
+        {t:"Watchlist (149 sources)", d:"Screening across 149 sources; matches (if any) listed with confidence.", tag:"COMPLETED"},
+        {t:"Internet Due Diligence", d:"Open web presence scan + key flags summary.", tag:"COMPLETED"},
+        {t:"Court Orders", d:"Court order data queried; results summarized.", tag:"COMPLETED"},
+        {t:"Audit Trail", d:"Inputs + processing timestamps captured.", tag:"LOGGED"},
+      ];
+
+      reportBody.innerHTML = `
+        <div class="muted">Demo report preview (swap this for your real report link / PDF viewer).</div>
+        <div style="margin-top:10px;">
+          <span class="tag">${isFull ? "FULL DD" : "LIMITED DD"}</span>
+          <span class="tag" style="margin-left:8px;">PURPOSE: ${escapeHtml(state.requester.data.purpose)}</span>
+        </div>
+        <div class="report-grid" style="margin-top:12px;">
+          ${cards.map(c => `
+            <div class="report-card">
+              <h4>${escapeHtml(c.t)}</h4>
+              <p>${escapeHtml(c.d)}</p>
+              <div class="tag">${escapeHtml(c.tag)}</div>
+            </div>
+          `).join("")}
+        </div>
+        <div style="margin-top: 14px;">
+          <button class="control-btn" id="fakeDownload">⬇ Download PDF (demo)</button>
+        </div>
+      `;
+      setTimeout(() => {
+        const btn = document.getElementById("fakeDownload");
+        if(btn) btn.addEventListener("click", () => alert("Demo only. Hook this to your real PDF link."));
+      }, 0);
+      backdrop.style.display = "flex";
+    }
+
+    document.addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-action]");
+      if(!btn) return;
+      const action = btn.getAttribute("data-action");
+
+      if(action === "open_report"){ openReport(); return; }
+
+      if(action === "pick_dd"){
+        const val = btn.getAttribute("data-value");
+        state.requester.data.ddOption = val;
+        state.requester.stage = "SERVICE";
+        addMessage("requester","user", val === "FULL" ? "✅ Full Due Diligence" : "⚡ Limited Due Diligence");
+        addMessage("requester","system",`
+          ${showDDInfo(val)}
+          <div class="divider"></div>
+          Click <strong>Proceed</strong> to continue.
+          <div class="button-group">
+            <button class="whatsapp-button" data-action="req_proceed">➡️ Proceed</button>
+          </div>
+        `);
+        return;
+      }
+
+      if(action === "req_proceed"){ showDetailsForm(); maybeAutoplay(); return; }
+      if(action === "req_cancel"){ addMessage("requester","system",`<div class="warning-box">Cancelled. Tap reset to start again.</div>`); return; }
+      if(action === "req_back_to_details"){ showDetailsForm(); return; }
+
+      if(action === "req_to_purpose_full"){
+        const rp = document.getElementById("req_phone")?.value || "";
+        const sn = document.getElementById("sub_name")?.value || "";
+        const sp = document.getElementById("sub_phone")?.value || "";
+
+        const errs = [];
+        if(!rp.trim() || !isValidPhone(rp)) errs.push("Your mobile number looks invalid.");
+        if(!sn.trim()) errs.push("Submitter name is required.");
+        if(!sp.trim() || !isValidPhone(sp)) errs.push("Submitter WhatsApp number looks invalid.");
+        if(errs.length){
+          addMessage("requester","system",`
+            <div class="warning-box">
+              ⚠️ <strong>Please fix:</strong><br>
+              ${errs.map(x => `• ${escapeHtml(x)}`).join("<br>")}
+            </div>
+          `);
+          return;
+        }
+
+        state.requester.data.requesterPhone = normalizePhone(rp);
+        state.requester.data.submitterName = sn.trim();
+        state.requester.data.submitterPhone = normalizePhone(sp);
+        showPurposePicker(); maybeAutoplay(); return;
+      }
+
+      if(action === "req_to_purpose_limited"){
+        const rp = document.getElementById("req_phone")?.value || "";
+        const name = document.getElementById("subject_name")?.value || "";
+        const phone = document.getElementById("subject_phone")?.value || "";
+        const email = document.getElementById("subject_email")?.value || "";
+        const dob = document.getElementById("subject_dob")?.value || "";
+        const pan = document.getElementById("subject_pan")?.value || "";
+        const pp = document.getElementById("subject_passport")?.value || "";
+        const dl = document.getElementById("subject_dl")?.value || "";
+
+        const errs = [];
+        if(!rp.trim() || !isValidPhone(rp)) errs.push("Your mobile number looks invalid.");
+        if(!name.trim()) errs.push("Subject name is required.");
+        if(phone.trim() && !isValidPhone(phone)) errs.push("Subject phone looks invalid.");
+        if(email.trim() && !isValidEmail(email)) errs.push("Subject email looks invalid.");
+        if(dob.trim() && !isValidDOB(dob)) errs.push("DOB should be YYYY-MM-DD.");
+        if(pan.trim() && !isValidPAN(pan)) errs.push("PAN looks invalid (format: ABCDE1234F).");
+        if(errs.length){
+          addMessage("requester","system",`
+            <div class="warning-box">
+              ⚠️ <strong>Please fix:</strong><br>
+              ${errs.map(x => `• ${escapeHtml(x)}`).join("<br>")}
+            </div>
+          `);
+          return;
+        }
+
+        state.requester.data.requesterPhone = normalizePhone(rp);
+        state.requester.data.subjectName = name.trim();
+        state.requester.data.subjectPhone = normalizePhone(phone);
+        state.requester.data.subjectEmail = email.trim();
+        state.requester.data.subjectDOB = dob.trim();
+        state.requester.data.subjectPAN = pan.trim().toUpperCase();
+        state.requester.data.subjectPassport = pp.trim();
+        state.requester.data.subjectDL = dl.trim();
+        showPurposePicker(); maybeAutoplay(); return;
+      }
+
+      if(action === "req_pick_purpose"){
+        state.requester.data.purpose = btn.getAttribute("data-value") || "Employment";
+        state.requester.messages.pop();
+        showPurposePicker();
+        return;
+      }
+
+      if(action === "req_submit"){
+        addMessage("requester","user","➡️ Submit");
+        requesterWaiting();
+
+        if(state.requester.data.ddOption === "FULL"){
+          setOnline("submitter", false);
+          showTyping("submitter");
+          setTimeout(() => {
+            hideTyping("submitter");
+            setOnline("submitter", true);
+            notifySubmitterConsent();
+            maybeAutoplay();
+          }, 850);
+        } else {
+          setOnline("requester", false);
+          showTyping("requester");
+          setTimeout(() => {
+            hideTyping("requester");
+            setOnline("requester", true);
+            requesterComplete();
+            maybeAutoplay();
+          }, 1100);
+        }
+        return;
+      }
+
+      if(action === "req_restart"){ resetJourney(); return; }
+
+      // submitter actions (FULL only)
+      if(action === "sub_consent_yes"){
+        addMessage("submitter","user","✅ Yes - Give Consent");
+        showSubmitterDetailsForm();
+
+        setOnline("requester", false);
+        showTyping("requester");
+        setTimeout(() => {
+          hideTyping("requester");
+          setOnline("requester", true);
+          addMessage("requester","system",`
+            <div class="success-box">
+              ✅ <strong>Consent received.</strong><br><br>
+              The counterparty is submitting Email + PAN and completing Aadhaar Face Auth now.
+            </div>
+          `);
+          maybeAutoplay();
+        }, 850);
+        return;
+      }
+
+      if(action === "sub_consent_no"){
+        addMessage("submitter","user","❌ No - Decline");
+        submitterDeclined();
+
+        setOnline("requester", false);
+        showTyping("requester");
+        setTimeout(() => {
+          hideTyping("requester");
+          setOnline("requester", true);
+          requesterDeclined();
+        }, 850);
+        return;
+      }
+
+      if(action === "sub_save_details"){
+        const email = document.getElementById("sub_email")?.value || "";
+        const pan = document.getElementById("sub_pan")?.value || "";
+
+        const errs = [];
+        if(!isValidEmail(email)) errs.push("Email looks invalid.");
+        if(!isValidPAN(pan)) errs.push("PAN looks invalid (format: ABCDE1234F).");
+
+        if(errs.length){
+          addMessage("submitter","system",`
+            <div class="warning-box">
+              ⚠️ <strong>Please fix:</strong><br>
+              ${errs.map(x => `• ${escapeHtml(x)}`).join("<br>")}
+            </div>
+          `);
+          return;
+        }
+
+        state.requester.data.submitterEmail = email.trim();
+        state.requester.data.submitterPAN = pan.trim().toUpperCase();
+
+        addMessage("submitter","user","➡️ Continue to Aadhaar Face Auth");
+        showAadhaarInstructions();
+        maybeAutoplay();
+        return;
+      }
+
+      if(action === "sub_already_have"){ showQRStep(); maybeAutoplay(); return; }
+
+      if(action === "sub_cancel"){
+        addMessage("submitter","system",`<div class="warning-box">Cancelled. You can ignore this request.</div>`);
+        return;
+      }
+
+      if(action === "sub_done"){
+        addMessage("submitter","user","✅ I've completed verification");
+        submitterDone();
+
+        setOnline("requester", false);
+        showTyping("requester");
+        setTimeout(() => {
+          hideTyping("requester");
+          setOnline("requester", true);
+          requesterComplete();
+        }, 950);
+
+        return;
+      }
+    });
+
+    document.getElementById("closeModal").addEventListener("click", () => backdrop.style.display = "none");
+    backdrop.addEventListener("click", (e) => { if(e.target === backdrop) backdrop.style.display = "none"; });
+
+    function handleComposerSend(who){
+      const input = who === "requester" ? reqComposer : subComposer;
+      const val = (input.value || "").trim();
+      if(!val) return;
+      addMessage(who, "user", escapeHtml(val));
+      input.value = "";
+
+      if(who === "submitter"){
+        if(state.submitter.stage === "AADHAAR" && val.toLowerCase().includes("already")){
+          showQRStep();
+          maybeAutoplay();
+        }
+      }
+    }
+
+    reqSend.addEventListener("click", () => handleComposerSend("requester"));
+    subSend.addEventListener("click", () => handleComposerSend("submitter"));
+    reqComposer.addEventListener("keydown", (e) => { if(e.key === "Enter") handleComposerSend("requester"); });
+    subComposer.addEventListener("keydown", (e) => { if(e.key === "Enter") handleComposerSend("submitter"); });
+
+    const autoplayBtn = document.getElementById("autoplayBtn");
+    autoplayBtn.addEventListener("click", () => {
+      state.autoplay = !state.autoplay;
+      autoplayBtn.textContent = state.autoplay ? "⏸ Auto-play" : "▶ Auto-play";
+      if(state.autoplay) maybeAutoplay(true);
+    });
+
+    function clickFirst(selector){
+      const el = document.querySelector(selector);
+      if(el) el.click();
+    }
+
+    function maybeAutoplay(force=false){
+      if(!state.autoplay && !force) return;
+
+      setTimeout(() => {
+        if(!state.autoplay) return;
+
+        if(state.requester.stage === "INIT"){
+          clickFirst('[data-action="pick_dd"][data-value="FULL"]'); return;
+        }
+        if(state.requester.stage === "SERVICE"){
+          clickFirst('[data-action="req_proceed"]'); return;
+        }
+        if(state.requester.stage === "DETAILS"){
+          const dd = state.requester.data.ddOption;
+          if(dd === "FULL"){
+            const rp = document.getElementById("req_phone");
+            const sn = document.getElementById("sub_name");
+            const sp = document.getElementById("sub_phone");
+            if(rp && !rp.value) rp.value = "+91 98765 43210";
+            if(sn && !sn.value) sn.value = "Ranjeet Mendon";
+            if(sp && !sp.value) sp.value = "+91 87654 32109";
+            clickFirst('[data-action="req_to_purpose_full"]'); return;
+          } else {
+            const rp = document.getElementById("req_phone");
+            const n = document.getElementById("subject_name");
+            const p = document.getElementById("subject_phone");
+            const e = document.getElementById("subject_email");
+            const d = document.getElementById("subject_dob");
+            const pan = document.getElementById("subject_pan");
+            if(rp && !rp.value) rp.value = "+91 98765 43210";
+            if(n && !n.value) n.value = "Ranjeet Mendon";
+            if(p && !p.value) p.value = "+91 87654 32109";
+            if(e && !e.value) e.value = "ranjeet@example.com";
+            if(d && !d.value) d.value = "1992-04-18";
+            if(pan && !pan.value) pan.value = "ABCDE1234F";
+            clickFirst('[data-action="req_to_purpose_limited"]'); return;
+          }
+        }
+        if(state.requester.stage === "PURPOSE"){
+          clickFirst('[data-action="req_submit"]'); return;
+        }
+        if(state.submitter.stage === "CONSENT"){
+          clickFirst('[data-action="sub_consent_yes"]'); return;
+        }
+        if(state.submitter.stage === "SUBMITTER_DETAILS"){
+          const em = document.getElementById("sub_email");
+          const pan = document.getElementById("sub_pan");
+          if(em && !em.value) em.value = "ranjeet@example.com";
+          if(pan && !pan.value) pan.value = "ABCDE1234F";
+          clickFirst('[data-action="sub_save_details"]'); return;
+        }
+        if(state.submitter.stage === "AADHAAR"){
+          clickFirst('[data-action="sub_already_have"]'); return;
+        }
+        if(state.submitter.stage === "QR"){
+          clickFirst('[data-action="sub_done"]'); return;
+        }
+        if(state.requester.stage === "COMPLETE"){
+          if(!backdrop.style.display || backdrop.style.display === "none"){
+            clickFirst('[data-action="open_report"]');
+          }
+          return;
+        }
+      }, 650);
+    }
+
+    document.getElementById("resetBtn").addEventListener("click", resetJourney);
+    resetJourney();
+  </script>
+</body>
+</html>
