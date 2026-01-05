@@ -456,6 +456,19 @@
       color:#00a884;
     }
     .muted{ opacity: 0.82; }
+    .aadhaar-link-row{
+      display:flex;
+      align-items:center;
+      gap:6px;
+      margin-top:6px;
+    }
+    .aadhaar-link-icon{ color:#fff; }
+    .aadhaar-link{
+      color:#fff;
+      text-decoration: underline;
+      font-weight:700;
+    }
+    .aadhaar-link:visited{ color:#fff; }
     @media (max-width: 900px){ .journey-grid{ grid-template-columns: 1fr; } }
   </style>
 </head>
@@ -927,11 +940,22 @@
         <div class="divider"></div>
         <div>Click here to install:</div>
         <div style="margin-top:8px;">
-          <div>Android: <a href="https://play.google.com/..." target="_blank" rel="noopener">https://play.google.com/...</a></div>
-          <div>iOS: <a href="https://www.apple.com/in/app..." target="_blank" rel="noopener">https://www.apple.com/in/app...</a></div>
+          <div>Android:</div>
+          <div class="aadhaar-link-row">
+            <span class="aadhaar-link-icon">🔗</span>
+            <a class="aadhaar-link" href="https://tss.link/android" target="_blank" rel="noopener">tss.link/android</a>
+          </div>
+          <div style="margin-top:8px;">iOS:</div>
+          <div class="aadhaar-link-row">
+            <span class="aadhaar-link-icon">🔗</span>
+            <a class="aadhaar-link" href="https://tss.link/ios" target="_blank" rel="noopener">tss.link/ios</a>
+          </div>
         </div>
         <div style="margin-top:10px;">Watch how to register in the Aadhaar App:</div>
-        <div><a href="https://uidai.gov.in/ens/web..." target="_blank" rel="noopener">https://uidai.gov.in/ens/web...</a></div>
+        <div class="aadhaar-link-row">
+          <span class="aadhaar-link-icon">🔗</span>
+          <a class="aadhaar-link" href="https://tss.link/uidai" target="_blank" rel="noopener">tss.link/uidai</a>
+        </div>
         <div class="divider"></div>
         Or reply <strong>"I already have"</strong> if the app is installed.
         <br>
