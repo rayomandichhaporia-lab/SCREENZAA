@@ -1181,9 +1181,7 @@ function openReport(){
         const sp = document.getElementById("sub_phone")?.value || "";
 
         const errs = [];
-        if(!rp.trim() || !isValidPhone(rp)) errs.push("Your mobile number looks invalid.");
         if(!sn.trim()) errs.push("Submitter name is required.");
-        if(!sp.trim() || !isValidPhone(sp)) errs.push("Submitter WhatsApp number looks invalid.");
         if(errs.length){
           addMessage("requester","system",`
             <div class="warning-box">
@@ -1211,9 +1209,7 @@ function openReport(){
         const dl = document.getElementById("subject_dl")?.value || "";
 
         const errs = [];
-        if(!rp.trim() || !isValidPhone(rp)) errs.push("Your mobile number looks invalid.");
         if(!name.trim()) errs.push("Subject name is required.");
-        if(phone.trim() && !isValidPhone(phone)) errs.push("Subject phone looks invalid.");
         if(email.trim() && !isValidEmail(email)) errs.push("Subject email looks invalid.");
         if(dob.trim() && !isValidDOB(dob)) errs.push("DOB should be YYYY-MM-DD.");
         if(pan.trim() && !isValidPAN(pan)) errs.push("PAN looks invalid (format: ABCDE1234F).");
