@@ -574,7 +574,7 @@
           // requester
           requesterPhone:"",
           // submitter routing (Full DD)
-          submitterName: FIXED_SUBJECT_NAME,
+          submitterName: "",
           submitterPhone:"",
           // Full-DD submitter entered
           submitterEmail:"",
@@ -1137,8 +1137,11 @@
         input.value = randomIndianPhone();
         return;
       }
-      if(id === "sub_name" || id === "subject_name"){
+      if(id === "subject_name"){
         input.value = FIXED_SUBJECT_NAME;
+        return;
+      }
+      if(id === "sub_name"){
         return;
       }
       if(id === "sub_email" || id === "subject_email"){
