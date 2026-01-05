@@ -563,6 +563,8 @@
   </div>
 
   <script>
+    const FIXED_SUBJECT_NAME = "Yashdeep Sharma";
+
     const state = {
       requester: {
         stage: "INIT",
@@ -572,13 +574,13 @@
           // requester
           requesterPhone:"",
           // submitter routing (Full DD)
-          submitterName:"",
+          submitterName: FIXED_SUBJECT_NAME,
           submitterPhone:"",
           // Full-DD submitter entered
           submitterEmail:"",
           submitterPAN:"",
           // Limited-DD subject details (provided by requester)
-          subjectName:"",
+          subjectName: FIXED_SUBJECT_NAME,
           subjectPhone:"",
           subjectEmail:"",
           subjectDOB:"",
@@ -674,11 +676,11 @@
         ddOption: "",
         purpose: "Employment",
         requesterPhone:"",
-        submitterName:"",
+        submitterName: FIXED_SUBJECT_NAME,
         submitterPhone:"",
         submitterEmail:"",
         submitterPAN:"",
-        subjectName:"",
+        subjectName: FIXED_SUBJECT_NAME,
         subjectPhone:"",
         subjectEmail:"",
         subjectDOB:"",
@@ -885,7 +887,7 @@
           <div class="step-item">✓ Court Orders</div>
         `;
 
-      const subjectLabel = "Yashdeep Sharma";
+      const subjectLabel = FIXED_SUBJECT_NAME;
 
       addMessage("requester","system",`
         <div class="success-box">
@@ -1136,11 +1138,11 @@
         return;
       }
       if(id === "sub_name" || id === "subject_name"){
-        input.value = randomName();
+        input.value = FIXED_SUBJECT_NAME;
         return;
       }
       if(id === "sub_email" || id === "subject_email"){
-        const n = (document.getElementById("sub_name")?.value || document.getElementById("subject_name")?.value || randomName());
+        const n = (document.getElementById("sub_name")?.value || document.getElementById("subject_name")?.value || FIXED_SUBJECT_NAME);
         input.value = randomEmail(n);
         return;
       }
@@ -1173,7 +1175,7 @@
 function openReport(){
       const s = state.requester.data;
       const isFull = s.ddOption === "FULL";
-      const subjectLabel = "Yashdeep Sharma";
+      const subjectLabel = FIXED_SUBJECT_NAME;
       const reportName = "TSS_Complete_Due_Diligence_Report_Yashdeep_Sharma.pdf";
       const reportHref = "assets/TSS_Complete_Due_Diligence_Report_Yashdeep_Sharma.pdf";
       const purpose = s.purpose || "Purpose";
@@ -1222,11 +1224,10 @@ function openReport(){
 
       if(action === "req_to_purpose_full"){
         const rp = document.getElementById("req_phone")?.value || "";
-        const sn = document.getElementById("sub_name")?.value || "";
+        const sn = FIXED_SUBJECT_NAME;
         const sp = document.getElementById("sub_phone")?.value || "";
 
         const errs = [];
-        if(!sn.trim()) errs.push("Submitter name is required.");
         if(errs.length){
           addMessage("requester","system",`
             <div class="warning-box">
@@ -1238,14 +1239,14 @@ function openReport(){
         }
 
         state.requester.data.requesterPhone = normalizePhone(rp);
-        state.requester.data.submitterName = sn.trim();
+        state.requester.data.submitterName = sn;
         state.requester.data.submitterPhone = normalizePhone(sp);
         showPurposePicker(); maybeAutoplay(); return;
       }
 
       if(action === "req_to_purpose_limited"){
         const rp = document.getElementById("req_phone")?.value || "";
-        const name = document.getElementById("subject_name")?.value || "";
+        const name = FIXED_SUBJECT_NAME;
         const phone = document.getElementById("subject_phone")?.value || "";
         const email = document.getElementById("subject_email")?.value || "";
         const dob = document.getElementById("subject_dob")?.value || "";
@@ -1254,7 +1255,6 @@ function openReport(){
         const dl = document.getElementById("subject_dl")?.value || "";
 
         const errs = [];
-        if(!name.trim()) errs.push("Subject name is required.");
         if(dob.trim() && !isValidDOB(dob)) errs.push("DOB should be YYYY-MM-DD.");
         if(pan.trim() && !isValidPAN(pan)) errs.push("PAN looks invalid (format: ABCDE1234F).");
         if(errs.length){
@@ -1268,7 +1268,7 @@ function openReport(){
         }
 
         state.requester.data.requesterPhone = normalizePhone(rp);
-        state.requester.data.subjectName = name.trim();
+        state.requester.data.subjectName = name;
         state.requester.data.subjectPhone = normalizePhone(phone);
         state.requester.data.subjectEmail = email.trim();
         state.requester.data.subjectDOB = dob.trim();
