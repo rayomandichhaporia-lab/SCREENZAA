@@ -718,7 +718,6 @@
     }
 
     function showDDInfo(dd){
-      const fees = "XXX";
       if(dd === "FULL"){
         return `
           <div class="step-indicator">OPTION SELECTED</div>
@@ -731,7 +730,6 @@
             <div class="step-item">✓ Court Orders</div>
             <div class="step-item">✓ Credit Due Diligence</div>
           </div>
-          <div class="fee">Fees: <strong>${fees}</strong></div>
         `;
       }
       return `
@@ -743,7 +741,6 @@
           <div class="step-item">✓ Internet Due Diligence</div>
           <div class="step-item">✓ Court Orders</div>
         </div>
-        <div class="fee">Fees: <strong>${fees}</strong></div>
       `;
     }
 
