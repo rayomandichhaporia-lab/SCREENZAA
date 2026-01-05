@@ -923,14 +923,21 @@
       state.submitter.stage = "AADHAAR";
       addMessage("submitter","system",`
         <div class="step-indicator">STEP 2 OF 3</div>
-        📱 To establish identity, please use the <strong>Aadhaar App (UIDAI)</strong> for Face Authentication:
+        <div><strong>You will need the Aadhaar App (UIDAI).</strong></div>
         <div class="divider"></div>
-        • Android: <span class="muted">(Play Store Link)</span><br>
-        • iOS: <span class="muted">(App Store Link)</span>
-        <br><br>
-        Or reply <strong>"I already have"</strong> (or tap below) if installed.
+        <div>Click here to install:</div>
+        <div style="margin-top:8px;">
+          <div>Android: <a href="https://play.google.com/..." target="_blank" rel="noopener">https://play.google.com/...</a></div>
+          <div>iOS: <a href="https://www.apple.com/in/app..." target="_blank" rel="noopener">https://www.apple.com/in/app...</a></div>
+        </div>
+        <div style="margin-top:10px;">Watch how to register in the Aadhaar App:</div>
+        <div><a href="https://uidai.gov.in/ens/web..." target="_blank" rel="noopener">https://uidai.gov.in/ens/web...</a></div>
+        <div class="divider"></div>
+        Or reply <strong>"I already have"</strong> if the app is installed.
+        <br>
+        (Once installed please reply "I already have" to continue.)
         <div class="button-group">
-          <button class="whatsapp-button" data-action="sub_already_have">✅ I already have</button>
+          <button class="whatsapp-button" data-action="sub_already_have">I already have</button>
         </div>
       `);
     }
