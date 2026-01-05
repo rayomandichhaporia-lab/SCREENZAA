@@ -328,6 +328,31 @@
     }
     .report-link:hover{ transform: scale(1.02); box-shadow: 0 6px 16px rgba(0,168,132,0.22); }
 
+    .file-card{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      margin-top: 8px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .file-icon{
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: rgba(0,168,132,0.18);
+      font-size: 20px;
+      flex: 0 0 auto;
+    }
+    .file-meta{ font-size: 13px; line-height: 1.35; }
+    .file-name{ font-weight: 800; }
+    .file-sub{ opacity: 0.7; font-size: 11px; margin-top: 2px; }
+
     .fee{
       display:inline-flex;
       align-items:center;
@@ -1106,47 +1131,24 @@
 
 
 function openReport(){
-      const dd = state.requester.data.ddOption;
-      const isFull = dd === "FULL";
-      const cards = isFull ? [
-        {t:"Aadhaar Face Auth", d:"Counterparty identity established via Aadhaar App face authentication.", tag:"VERIFIED"},
-        {t:"Watchlist (149 sources)", d:"Screening across 149 sources; matches (if any) listed with confidence.", tag:"COMPLETED"},
-        {t:"Internet Due Diligence", d:"Open web presence scan + key flags summary.", tag:"COMPLETED"},
-        {t:"Court Orders", d:"Court order data queried; results summarized.", tag:"COMPLETED"},
-        {t:"Credit Due Diligence", d:"Credit/DD module run where applicable (demo).", tag:"COMPLETED"},
-        {t:"Audit Trail", d:"Consent timestamp + step logs captured.", tag:"LOGGED"},
-      ] : [
-        {t:"Watchlist (149 sources)", d:"Screening across 149 sources; matches (if any) listed with confidence.", tag:"COMPLETED"},
-        {t:"Internet Due Diligence", d:"Open web presence scan + key flags summary.", tag:"COMPLETED"},
-        {t:"Court Orders", d:"Court order data queried; results summarized.", tag:"COMPLETED"},
-        {t:"Audit Trail", d:"Inputs + processing timestamps captured.", tag:"LOGGED"},
-      ];
+      const s = state.requester.data;
+      const isFull = s.ddOption === "FULL";
+      const subjectLabel = isFull ? (s.submitterName || "Counterparty") : (s.subjectName || "Subject");
+      const reportName = isFull ? "Full DD Report.pdf" : "Limited DD Report.pdf";
+      const purpose = s.purpose || "Purpose";
 
-      reportBody.innerHTML = `
-        <div class="muted">Demo report preview (swap this for your real report link / PDF viewer).</div>
-        <div style="margin-top:10px;">
-          <span class="tag">${isFull ? "FULL DD" : "LIMITED DD"}</span>
-          <span class="tag" style="margin-left:8px;">PURPOSE: ${escapeHtml(state.requester.data.purpose)}</span>
+      addMessage("requester","system",`
+        <div><strong>&#128196; Report sent</strong></div>
+        <div class="file-card">
+          <div class="file-icon">&#128196;</div>
+          <div class="file-meta">
+            <div class="file-name">${escapeHtml(reportName)}</div>
+            <div class="file-sub">${escapeHtml(subjectLabel)} &middot; ${escapeHtml(purpose)}</div>
+          </div>
         </div>
-        <div class="report-grid" style="margin-top:12px;">
-          ${cards.map(c => `
-            <div class="report-card">
-              <h4>${escapeHtml(c.t)}</h4>
-              <p>${escapeHtml(c.d)}</p>
-              <div class="tag">${escapeHtml(c.tag)}</div>
-            </div>
-          `).join("")}
-        </div>
-        <div style="margin-top: 14px;">
-          <button class="control-btn" id="fakeDownload">⬇ Download PDF (demo)</button>
-        </div>
-      `;
-      setTimeout(() => {
-        const btn = document.getElementById("fakeDownload");
-        if(btn) btn.addEventListener("click", () => alert("Demo only. Hook this to your real PDF link."));
-      }, 0);
-      backdrop.style.display = "flex";
+      `);
     }
+
 
     document.addEventListener("click", (e) => {
       const btn = e.target.closest("[data-action]");
