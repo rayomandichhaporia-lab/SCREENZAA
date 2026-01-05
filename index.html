@@ -344,6 +344,11 @@
       background: rgba(255,255,255,0.06);
       border: 1px solid rgba(255,255,255,0.08);
     }
+    .file-download{
+      color: inherit;
+      text-decoration: none;
+      display: block;
+    }
     .file-icon{
       width: 38px;
       height: 38px;
@@ -1171,18 +1176,21 @@ function openReport(){
       const s = state.requester.data;
       const isFull = s.ddOption === "FULL";
       const subjectLabel = isFull ? (s.submitterName || "Counterparty") : (s.subjectName || "Subject");
-      const reportName = isFull ? "Full DD Report.pdf" : "Limited DD Report.pdf";
+      const reportName = "TSS_Complete_Due_Diligence_Report_Yashdeep_Sharma.pdf";
+      const reportHref = "assets/TSS_Complete_Due_Diligence_Report_Yashdeep_Sharma.pdf";
       const purpose = s.purpose || "Purpose";
 
       addMessage("requester","system",`
         <div><strong>&#128196; Report sent</strong></div>
-        <div class="file-card">
-          <div class="file-icon">&#128196;</div>
-          <div class="file-meta">
-            <div class="file-name">${escapeHtml(reportName)}</div>
-            <div class="file-sub">${escapeHtml(subjectLabel)} &middot; ${escapeHtml(purpose)}</div>
+        <a class="file-download" href="${reportHref}" download>
+          <div class="file-card">
+            <div class="file-icon">&#128196;</div>
+            <div class="file-meta">
+              <div class="file-name">${escapeHtml(reportName)}</div>
+              <div class="file-sub">${escapeHtml(subjectLabel)} &middot; ${escapeHtml(purpose)}</div>
+            </div>
           </div>
-        </div>
+        </a>
       `);
     }
 
