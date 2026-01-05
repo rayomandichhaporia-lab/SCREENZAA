@@ -885,9 +885,7 @@
           <div class="step-item">✓ Court Orders</div>
         `;
 
-      const subjectLabel = dd === "FULL"
-        ? (s.submitterName || "Counterparty")
-        : (s.subjectName || "Subject");
+      const subjectLabel = "Yashdeep Sharma";
 
       addMessage("requester","system",`
         <div class="success-box">
@@ -1175,7 +1173,7 @@
 function openReport(){
       const s = state.requester.data;
       const isFull = s.ddOption === "FULL";
-      const subjectLabel = isFull ? (s.submitterName || "Counterparty") : (s.subjectName || "Subject");
+      const subjectLabel = "Yashdeep Sharma";
       const reportName = "TSS_Complete_Due_Diligence_Report_Yashdeep_Sharma.pdf";
       const reportHref = "assets/TSS_Complete_Due_Diligence_Report_Yashdeep_Sharma.pdf";
       const purpose = s.purpose || "Purpose";
@@ -1257,7 +1255,6 @@ function openReport(){
 
         const errs = [];
         if(!name.trim()) errs.push("Subject name is required.");
-        if(email.trim() && !isValidEmail(email)) errs.push("Subject email looks invalid.");
         if(dob.trim() && !isValidDOB(dob)) errs.push("DOB should be YYYY-MM-DD.");
         if(pan.trim() && !isValidPAN(pan)) errs.push("PAN looks invalid (format: ABCDE1234F).");
         if(errs.length){
@@ -1356,7 +1353,6 @@ function openReport(){
         const pan = document.getElementById("sub_pan")?.value || "";
 
         const errs = [];
-        if(!isValidEmail(email)) errs.push("Email looks invalid.");
         if(!isValidPAN(pan)) errs.push("PAN looks invalid (format: ABCDE1234F).");
 
         if(errs.length){
