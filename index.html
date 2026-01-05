@@ -768,7 +768,7 @@
 
     function showPurposePicker(){
       state.requester.stage = "PURPOSE";
-      const purposes = ["Employment","Hiring Someone","Service / Vendor Work","Business Relationship","Other"];
+      const purposes = ["Employment","Hiring Someone","Service / Vendor Work","Business Relationship","Marriage","Personal","Rent","Other"];
       const selected = state.requester.data.purpose;
       const stepTotal = state.requester.data.ddOption === "FULL" ? "STEP 2 OF 4" : "STEP 2 OF 3";
 
@@ -988,7 +988,124 @@
     }
     function escapeAttr(s){ return escapeHtml(s).replaceAll('"',"&quot;"); }
 
-    function openReport(){
+    
+    /* -----------------------------
+       Auto-fill placeholder values on focus (requested)
+       - When an input is focused AND empty, we auto-populate a random realistic value.
+       - Does NOT overwrite any existing value.
+    ------------------------------*/
+    function randInt(min, max){ return Math.floor(Math.random() * (max - min + 1)) + min; }
+    function pick(arr){ return arr[randInt(0, arr.length - 1)]; }
+
+    function randomIndianPhone(){
+      // +91 9XXXXXXXXX style (10 digits starting 6-9)
+      const first = pick([6,7,8,9]);
+      let rest = "";
+      for(let i=0;i<9;i++) rest += String(randInt(0,9));
+      return `+91 ${first}${rest.slice(0,4)} ${rest.slice(4)}`;
+    }
+
+    function randomName(){
+      const first = ["Aditya","Ranjeet","Aarav","Ishaan","Kabir","Vihaan","Arjun","Neha","Ananya","Ira","Meera","Rhea","Sahil","Kunal","Rahul","Sneha","Priya","Aditi","Rohit","Nikhil"];
+      const last  = ["Thakur","Mendon","Sharma","Mehta","Patel","Singh","Iyer","Nair","Kapoor","Gupta","Bansal","Jain","Chopra","Desai","Kulkarni","Reddy","Shetty","Joshi","Khan","Verma"];
+      return `${pick(first)} ${pick(last)}`;
+    }
+
+    function slugify(s){
+      return (s || "")
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g,".")
+        .replace(/^\.+|\.+$/g,"")
+        .slice(0, 30) || "user";
+    }
+
+    function randomEmail(name){
+      const domains = ["gmail.com","outlook.com","proton.me","yahoo.com","company.com"];
+      return `${slugify(name)}${randInt(1,99)}@${pick(domains)}`;
+    }
+
+    function randomPAN(){
+      const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      const randLetter = () => letters[randInt(0, letters.length-1)];
+      let s = "";
+      for(let i=0;i<5;i++) s += randLetter();
+      s += String(randInt(0,9))+String(randInt(0,9))+String(randInt(0,9))+String(randInt(0,9));
+      s += randLetter();
+      return s;
+    }
+
+    function randomDOB(){
+      // between 1975-01-01 and 2006-12-28
+      const year = randInt(1975, 2006);
+      const month = randInt(1, 12);
+      const day = randInt(1, 28); // simple valid day
+      const mm = String(month).padStart(2,"0");
+      const dd = String(day).padStart(2,"0");
+      return `${year}-${mm}-${dd}`;
+    }
+
+    function randomPassport(){
+      // Not real format—demo-looking: 1 letter + 7 digits
+      const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      const L = letters[randInt(0, letters.length-1)];
+      let digits = "";
+      for(let i=0;i<7;i++) digits += String(randInt(0,9));
+      return `${L}${digits}`;
+    }
+
+    function randomDL(){
+      // Demo-looking Indian DL: MH12 2011 0001234
+      const states = ["MH","DL","KA","TN","GJ","RJ","UP","MP","WB","HR"];
+      const state = pick(states);
+      const rto = String(randInt(1, 99)).padStart(2,"0");
+      const year = randInt(2008, 2024);
+      const seq = String(randInt(1, 9999999)).padStart(7,"0");
+      return `${state}${rto} ${year} ${seq}`;
+    }
+
+    function autoFillForInput(input){
+      if(!input || input.value.trim()) return;
+      const id = input.id || "";
+      if(id === "req_phone" || id === "subject_phone" || id === "sub_phone"){
+        input.value = randomIndianPhone();
+        return;
+      }
+      if(id === "sub_name" || id === "subject_name"){
+        input.value = randomName();
+        return;
+      }
+      if(id === "sub_email" || id === "subject_email"){
+        const n = (document.getElementById("sub_name")?.value || document.getElementById("subject_name")?.value || randomName());
+        input.value = randomEmail(n);
+        return;
+      }
+      if(id === "sub_pan" || id === "subject_pan"){
+        input.value = randomPAN();
+        return;
+      }
+      if(id === "subject_dob"){
+        input.value = randomDOB();
+        return;
+      }
+      if(id === "subject_passport"){
+        input.value = randomPassport();
+        return;
+      }
+      if(id === "subject_dl"){
+        input.value = randomDL();
+        return;
+      }
+    }
+
+    // Since inputs are rendered dynamically into chat bubbles, use event delegation.
+    document.addEventListener("focusin", (e) => {
+      const input = e.target && e.target.matches && e.target.matches("input.input-field") ? e.target : null;
+      if(!input) return;
+      autoFillForInput(input);
+    });
+
+
+function openReport(){
       const dd = state.requester.data.ddOption;
       const isFull = dd === "FULL";
       const cards = isFull ? [
