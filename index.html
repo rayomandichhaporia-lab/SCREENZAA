@@ -575,6 +575,7 @@
           requesterPhone:"",
           // submitter routing (Full DD)
           submitterName: "",
+          submitterNameClicked: false,
           submitterPhone:"",
           // Full-DD submitter entered
           submitterEmail:"",
@@ -676,7 +677,8 @@
         ddOption: "",
         purpose: "Employment",
         requesterPhone:"",
-        submitterName: FIXED_SUBJECT_NAME,
+        submitterName: "",
+        submitterNameClicked: false,
         submitterPhone:"",
         submitterEmail:"",
         submitterPAN:"",
@@ -1137,11 +1139,13 @@
         input.value = randomIndianPhone();
         return;
       }
-      if(id === "subject_name"){
+      if(id === "sub_name"){
         input.value = FIXED_SUBJECT_NAME;
+        state.requester.data.submitterNameClicked = true;
         return;
       }
-      if(id === "sub_name"){
+      if(id === "subject_name"){
+        input.value = FIXED_SUBJECT_NAME;
         return;
       }
       if(id === "sub_email" || id === "subject_email"){
@@ -1227,10 +1231,11 @@ function openReport(){
 
       if(action === "req_to_purpose_full"){
         const rp = document.getElementById("req_phone")?.value || "";
-        const sn = FIXED_SUBJECT_NAME;
+        const sn = document.getElementById("sub_name")?.value || "";
         const sp = document.getElementById("sub_phone")?.value || "";
 
         const errs = [];
+        if(!state.requester.data.submitterNameClicked) errs.push("Tap the submitter full name field to confirm.");
         if(errs.length){
           addMessage("requester","system",`
             <div class="warning-box">
@@ -1242,7 +1247,7 @@ function openReport(){
         }
 
         state.requester.data.requesterPhone = normalizePhone(rp);
-        state.requester.data.submitterName = sn;
+        state.requester.data.submitterName = FIXED_SUBJECT_NAME;
         state.requester.data.submitterPhone = normalizePhone(sp);
         showPurposePicker(); maybeAutoplay(); return;
       }
