@@ -845,7 +845,7 @@
       state.requester.stage = "WAITING";
       const dd = state.requester.data.ddOption;
       const msg = dd === "FULL"
-        ? `✅ Thank you.The counterpaty will be notified to complete the verification`
+        ? `✅ Thank you. The counterparty will be notified to complete the verification.`
         : `✅ Thank you. We will run checks based on the details provided.`;
       addMessage("requester","system",`
         <div class="success-box">${msg}</div>
@@ -916,7 +916,7 @@
         <br><br>
         <strong>${requesterDisplay}</strong> wants to perform <strong>Full Due Diligence</strong> for <strong>${escapeHtml(s.purpose)}</strong>.
         <div class="divider"></div>
-        please provide your willigness:
+        Please provide your willingness:
         <div class="button-group">
           <button class="whatsapp-button" data-action="sub_consent_yes">✅ Yes</button>
           <button class="whatsapp-button secondary" data-action="sub_consent_no">❌ No</button>
@@ -970,7 +970,7 @@
         <div class="divider"></div>
         Or reply <strong>"I already have"</strong> if the app is installed.
         <br>
-        (Once installed please reply "I already have" to continue.)
+        (Once installed, please reply "I already have" to continue.)
         <div class="button-group">
           <button class="whatsapp-button" data-action="sub_already_have">I already have</button>
         </div>
