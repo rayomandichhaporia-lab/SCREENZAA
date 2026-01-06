@@ -573,6 +573,7 @@
           purpose: "Employment",
           // requester
           requesterPhone:"",
+          requesterNumber:"",
           // submitter routing (Full DD)
           submitterName: "",
           submitterNameClicked: false,
@@ -677,6 +678,7 @@
         ddOption: "",
         purpose: "Employment",
         requesterPhone:"",
+        requesterNumber:"",
         submitterName: "",
         submitterNameClicked: false,
         submitterPhone:"",
@@ -768,7 +770,7 @@
           <div class="hint">They will be asked for consent + Email + PAN + Aadhaar face authentication.</div>
 
           <div class="button-group">
-            <button class="whatsapp-button" data-action="req_to_purpose_full">➡️ Continue</button>
+            <button class="whatsapp-button" data-action="req_to_purpose_full">➡️ Next</button>
             <button class="whatsapp-button secondary" data-action="req_cancel">Cancel</button>
           </div>
         `);
@@ -810,7 +812,7 @@
         <div class="hint">No counterparty consent needed in Limited DD (demo behavior).</div>
 
         <div class="button-group">
-          <button class="whatsapp-button" data-action="req_to_purpose_limited">➡️ Continue</button>
+          <button class="whatsapp-button" data-action="req_to_purpose_limited">➡️ Next</button>
           <button class="whatsapp-button secondary" data-action="req_cancel">Cancel</button>
         </div>
       `);
@@ -907,7 +909,9 @@
     function notifySubmitterConsent(){
       state.submitter.stage = "CONSENT";
       const s = state.requester.data;
-      const requesterDisplay = s.requesterPhone ? `Requester (${escapeHtml(s.requesterPhone)})` : "A requester";
+      const requesterName = s.requesterPhone || "A requester";
+      const requesterNumber = s.requesterNumber ? ` (${escapeHtml(s.requesterNumber)})` : "";
+      const requesterDisplay = `${escapeHtml(requesterName)}${requesterNumber}`;
 
       if(state.submitter.messages.length === 1){ state.submitter.messages = []; }
 
@@ -1132,6 +1136,7 @@
       const id = input.id || "";
       if(id === "req_phone"){
         input.value = randomName();
+        state.requester.data.requesterNumber = randomIndianPhone();
         return;
       }
       if(id === "subject_phone" || id === "sub_phone"){
@@ -1245,6 +1250,9 @@ function openReport(){
           return;
         }
 
+        if(!state.requester.data.requesterNumber){
+          state.requester.data.requesterNumber = randomIndianPhone();
+        }
         state.requester.data.requesterPhone = normalizePhone(rp);
         state.requester.data.submitterName = FIXED_SUBJECT_NAME;
         state.requester.data.submitterPhone = normalizePhone(sp);
@@ -1274,6 +1282,9 @@ function openReport(){
           return;
         }
 
+        if(!state.requester.data.requesterNumber){
+          state.requester.data.requesterNumber = randomIndianPhone();
+        }
         state.requester.data.requesterPhone = normalizePhone(rp);
         state.requester.data.subjectName = name;
         state.requester.data.subjectPhone = normalizePhone(phone);
