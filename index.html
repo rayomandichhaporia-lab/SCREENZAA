@@ -756,8 +756,8 @@
           <div class="divider"></div>
 
           <div class="section-title">Requester</div>
-          <label class="field-label">Your Mobile Number</label>
-          <input class="input-field" id="req_phone" placeholder="e.g. +91 98765 43210" value="${escapeHtml(state.requester.data.requesterPhone)}" />
+          <label class="field-label">Your Full Name</label>
+          <input class="input-field" id="req_phone" placeholder="e.g. Aarav Mehta" value="${escapeHtml(state.requester.data.requesterPhone)}" />
 
           <div class="section-title">Counterparty (Submitter) Details</div>
           <label class="field-label">Submitter Full Name</label>
@@ -782,8 +782,8 @@
         <div class="divider"></div>
 
         <div class="section-title">Requester</div>
-        <label class="field-label">Your Mobile Number</label>
-        <input class="input-field" id="req_phone" placeholder="e.g. +91 98765 43210" value="${escapeHtml(state.requester.data.requesterPhone)}" />
+        <label class="field-label">Your Full Name</label>
+        <input class="input-field" id="req_phone" placeholder="e.g. Aarav Mehta" value="${escapeHtml(state.requester.data.requesterPhone)}" />
 
         <div class="section-title">Subject Details (Provided by Requester)</div>
         <label class="field-label">Full Name</label>
@@ -818,7 +818,7 @@
 
     function showPurposePicker(){
       state.requester.stage = "PURPOSE";
-      const purposes = ["Employment","Hiring Someone","Service / Vendor Work","Business Relationship","Marriage","Personal","Rent","Other"];
+      const purposes = ["Employment","Household/Support Staff","Service / Vendor Work","Business Relationship","Marriage","Personal","Rent"];
       const selected = state.requester.data.purpose;
       const stepTotal = state.requester.data.ddOption === "FULL" ? "STEP 2 OF 4" : "STEP 2 OF 3";
 
@@ -845,7 +845,7 @@
       state.requester.stage = "WAITING";
       const dd = state.requester.data.ddOption;
       const msg = dd === "FULL"
-        ? `✅ Thank you. The counterparty will be notified to provide consent and complete verification.`
+        ? `✅ Thank you.The counterpaty will be notified to complete the verification`
         : `✅ Thank you. We will run checks based on the details provided.`;
       addMessage("requester","system",`
         <div class="success-box">${msg}</div>
@@ -916,10 +916,10 @@
         <br><br>
         <strong>${requesterDisplay}</strong> wants to perform <strong>Full Due Diligence</strong> for <strong>${escapeHtml(s.purpose)}</strong>.
         <div class="divider"></div>
-        Please provide your consent to proceed:
+        please provide your willigness:
         <div class="button-group">
-          <button class="whatsapp-button" data-action="sub_consent_yes">✅ Yes - Give Consent</button>
-          <button class="whatsapp-button secondary" data-action="sub_consent_no">❌ No - Decline</button>
+          <button class="whatsapp-button" data-action="sub_consent_yes">✅ Yes</button>
+          <button class="whatsapp-button secondary" data-action="sub_consent_no">❌ No</button>
         </div>
       `);
     }
@@ -1132,7 +1132,11 @@
     function autoFillForInput(input){
       if(!input || input.value.trim()) return;
       const id = input.id || "";
-      if(id === "req_phone" || id === "subject_phone" || id === "sub_phone"){
+      if(id === "req_phone"){
+        input.value = randomName();
+        return;
+      }
+      if(id === "subject_phone" || id === "sub_phone"){
         input.value = randomIndianPhone();
         return;
       }
@@ -1320,7 +1324,7 @@ function openReport(){
 
       // submitter actions (FULL only)
       if(action === "sub_consent_yes"){
-        addMessage("submitter","user","✅ Yes - Give Consent");
+        addMessage("submitter","user","✅ Yes");
         showSubmitterDetailsForm();
 
         setOnline("requester", false);
@@ -1330,7 +1334,7 @@ function openReport(){
           setOnline("requester", true);
           addMessage("requester","system",`
             <div class="success-box">
-              ✅ <strong>Consent received.</strong><br><br>
+              ✅ <strong>User has accepted request.</strong><br><br>
               The counterparty is submitting Email + PAN and completing Aadhaar Face Auth now.
             </div>
           `);
@@ -1340,7 +1344,7 @@ function openReport(){
       }
 
       if(action === "sub_consent_no"){
-        addMessage("submitter","user","❌ No - Decline");
+        addMessage("submitter","user","❌ No");
         submitterDeclined();
 
         setOnline("requester", false);
