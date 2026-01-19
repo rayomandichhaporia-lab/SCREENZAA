@@ -84,6 +84,11 @@
       border-radius: 12px;
       width: fit-content;
       cursor: pointer;
+      transition: background .2s ease, box-shadow .2s ease;
+    }
+    .phone-label.is-live{
+      background: #cfeedd;
+      box-shadow: 0 6px 14px rgba(0, 168, 132, 0.18);
     }
     .phone-label .live-dots{
       display: none;
@@ -1469,7 +1474,13 @@ function openReport(){
 
     document.querySelectorAll("[data-live-toggle]").forEach((label) => {
       label.addEventListener("click", () => {
-        label.classList.toggle("is-live");
+        const isActive = label.classList.contains("is-live");
+        document.querySelectorAll("[data-live-toggle].is-live").forEach((el) => {
+          el.classList.remove("is-live");
+        });
+        if(!isActive){
+          label.classList.add("is-live");
+        }
       });
     });
 
