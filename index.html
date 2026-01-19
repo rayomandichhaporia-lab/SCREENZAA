@@ -70,14 +70,40 @@
       margin-top: 12px;
     }
     .phone-label{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
       text-align:center;
       color:#111;
       font-weight:800;
-      margin-bottom:12px;
+      margin: 0 auto 12px;
       font-size:16px;
       background: #f1f3f5;
-      padding: 10px 12px;
+      padding: 10px 14px;
       border-radius: 12px;
+      width: fit-content;
+      cursor: pointer;
+    }
+    .phone-label .live-dots{
+      display: none;
+      align-items: center;
+      gap: 4px;
+    }
+    .phone-label.is-live .live-dots{ display: inline-flex; }
+    .phone-label .live-dot{
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #2d8cff;
+      opacity: 0.5;
+      animation: livePulse 1.2s infinite;
+    }
+    .phone-label .live-dot:nth-child(2){ animation-delay: .2s; }
+    .phone-label .live-dot:nth-child(3){ animation-delay: .4s; }
+    @keyframes livePulse{
+      0%,80%,100%{ transform: translateY(0); opacity: 0.4; }
+      40%{ transform: translateY(-3px); opacity: 1; }
     }
     .phone-mockup{
       background:#000;
@@ -503,7 +529,14 @@
 
     <div class="journey-grid">
       <div>
-        <div class="phone-label">Requester (Initiator)</div>
+        <div class="phone-label" data-live-toggle="1">
+          <span>Requester (Initiator)</span>
+          <span class="live-dots" aria-hidden="true">
+            <span class="live-dot"></span>
+            <span class="live-dot"></span>
+            <span class="live-dot"></span>
+          </span>
+        </div>
         <div class="phone-mockup">
           <div class="screen">
             <div class="status-bar">
@@ -527,7 +560,14 @@
       </div>
 
       <div>
-        <div class="phone-label">Submitter (Counterparty)</div>
+        <div class="phone-label" data-live-toggle="1">
+          <span>Submitter (Counterparty)</span>
+          <span class="live-dots" aria-hidden="true">
+            <span class="live-dot"></span>
+            <span class="live-dot"></span>
+            <span class="live-dot"></span>
+          </span>
+        </div>
         <div class="phone-mockup">
           <div class="screen">
             <div class="status-bar">
@@ -1426,6 +1466,12 @@ function openReport(){
     subSend.addEventListener("click", () => handleComposerSend("submitter"));
     reqComposer.addEventListener("keydown", (e) => { if(e.key === "Enter") handleComposerSend("requester"); });
     subComposer.addEventListener("keydown", (e) => { if(e.key === "Enter") handleComposerSend("submitter"); });
+
+    document.querySelectorAll("[data-live-toggle]").forEach((label) => {
+      label.addEventListener("click", () => {
+        label.classList.toggle("is-live");
+      });
+    });
 
     const autoplayBtn = document.getElementById("autoplayBtn");
     autoplayBtn.addEventListener("click", () => {
