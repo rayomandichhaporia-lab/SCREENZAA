@@ -173,6 +173,7 @@
       display:inline-block;
       margin-bottom: 8px;
     }
+    .step-text{ margin-top: 6px; }
     .section-title{
       color:#00a884;
       font-weight:800;
@@ -983,7 +984,7 @@
       state.submitter.stage = "QR";
       addMessage("submitter","system",`
         <div class="step-indicator">STEP 3 OF 3</div>
-        Please click the button to finish Aadhaar verification in the official Aadhaar app.
+        <div class="step-text">Please click the button to finish Aadhaar verification in the official Aadhaar app.</div>
         <div class="button-group">
           <a class="whatsapp-button" href="https://uidai.godreamcast.com" target="_blank" rel="noopener" data-action="sub_done">Open Aadhaar App</a>
           <button class="whatsapp-button secondary" data-action="sub_cancel">Cancel</button>
