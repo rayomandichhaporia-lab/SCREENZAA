@@ -8,7 +8,7 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body{
       font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
-      background:#fff;
+      background: radial-gradient(1200px 600px at 10% 10%, #e8f8ee 0%, #f6f7fb 55%, #ffffff 100%);
       padding:28px 18px;
       min-height:100vh;
       color:#111;
@@ -90,26 +90,6 @@
       background: #cfeedd;
       box-shadow: 0 6px 14px rgba(0, 168, 132, 0.18);
     }
-    .phone-label .live-dots{
-      display: none;
-      align-items: center;
-      gap: 4px;
-    }
-    .phone-label.is-live .live-dots{ display: inline-flex; }
-    .phone-label .live-dot{
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: #2d8cff;
-      opacity: 0.5;
-      animation: livePulse 1.2s infinite;
-    }
-    .phone-label .live-dot:nth-child(2){ animation-delay: .2s; }
-    .phone-label .live-dot:nth-child(3){ animation-delay: .4s; }
-    @keyframes livePulse{
-      0%,80%,100%{ transform: translateY(0); opacity: 0.4; }
-      40%{ transform: translateY(-3px); opacity: 1; }
-    }
     .phone-mockup{
       background:#000;
       border-radius:40px;
@@ -117,7 +97,28 @@
       box-shadow:0 20px 60px rgba(0,0,0,0.30);
       margin:0 auto;
       max-width:420px;
+      position: relative;
     }
+    .phone-mockup::after{
+      content:"";
+      position: absolute;
+      inset: -5px;
+      border-radius: 44px;
+      border: 2px solid transparent;
+      opacity: 0;
+      pointer-events: none;
+      box-shadow: 0 0 0 rgba(0,168,132,0);
+    }
+    .phone-mockup.is-highlighted::after{
+      border-color: #00a884;
+      opacity: 1;
+      animation: borderGlow 1.2s ease-in-out infinite;
+    }
+    @keyframes borderGlow{
+      0%,100%{ box-shadow: 0 0 6px rgba(0,168,132,0.30); }
+      50%{ box-shadow: 0 0 22px rgba(0,168,132,0.6); }
+    }
+    body.border-mode-active .phone-mockup{ cursor: pointer; }
     .screen{
       background:#0a1014;
       border-radius:28px;
@@ -527,8 +528,9 @@
         <div class="pill">Purpose: <strong>kept same</strong></div>
       </div>
       <div class="right" style="display:flex; gap:10px; align-items:center;">
-        <button class="control-btn secondary" id="autoplayBtn" title="Auto-walkthrough">▶ Auto-play</button>
-        <button class="control-btn" id="resetBtn" title="Reset the journey">↻ Reset</button>
+        <button class="control-btn secondary" id="autoplayBtn" title="Auto-walkthrough">? Auto-play</button>
+        <button class="control-btn secondary" id="borderModeBtn" title="Toggle border highlight mode">Border mode: Off</button>
+        <button class="control-btn" id="resetBtn" title="Reset the journey">? Reset</button>
       </div>
     </div>
 
@@ -536,11 +538,6 @@
       <div>
         <div class="phone-label" data-live-toggle="1">
           <span>Requester (Initiator)</span>
-          <span class="live-dots" aria-hidden="true">
-            <span class="live-dot"></span>
-            <span class="live-dot"></span>
-            <span class="live-dot"></span>
-          </span>
         </div>
         <div class="phone-mockup">
           <div class="screen">
@@ -567,11 +564,6 @@
       <div>
         <div class="phone-label" data-live-toggle="1">
           <span>Submitter (Counterparty)</span>
-          <span class="live-dots" aria-hidden="true">
-            <span class="live-dot"></span>
-            <span class="live-dot"></span>
-            <span class="live-dot"></span>
-          </span>
         </div>
         <div class="phone-mockup">
           <div class="screen">
@@ -643,6 +635,7 @@
         messages: []
       },
       autoplay: false,
+      borderMode: false,
     };
 
     const reqChat = document.getElementById("reqChat");
@@ -741,7 +734,14 @@
       state.requester.messages = [];
       state.submitter.messages = [];
       state.autoplay = false;
-      document.getElementById("autoplayBtn").textContent = "▶ Auto-play";
+      state.borderMode = false;
+      document.getElementById("autoplayBtn").textContent = "? Auto-play";
+      const borderModeBtn = document.getElementById("borderModeBtn");
+      if(borderModeBtn) borderModeBtn.textContent = "Border mode: Off";
+      document.body.classList.remove("border-mode-active");
+      document.querySelectorAll(".phone-mockup.is-highlighted").forEach((el) => {
+        el.classList.remove("is-highlighted");
+      });
       seed();
     }
 
@@ -1483,6 +1483,30 @@ function openReport(){
         }
       });
     });
+
+    const borderModeBtn = document.getElementById("borderModeBtn");
+    const phoneFrames = document.querySelectorAll(".phone-mockup");
+    if(borderModeBtn){
+      borderModeBtn.addEventListener("click", () => {
+        state.borderMode = !state.borderMode;
+        document.body.classList.toggle("border-mode-active", state.borderMode);
+        borderModeBtn.textContent = state.borderMode ? "Border mode: On" : "Border mode: Off";
+        if(!state.borderMode){
+          phoneFrames.forEach((el) => el.classList.remove("is-highlighted"));
+        }
+      });
+    }
+    phoneFrames.forEach((frame) => {
+      frame.addEventListener("click", () => {
+        if(!state.borderMode) return;
+        const isActive = frame.classList.contains("is-highlighted");
+        phoneFrames.forEach((el) => el.classList.remove("is-highlighted"));
+        if(!isActive){
+          frame.classList.add("is-highlighted");
+        }
+      });
+    });
+
 
     const autoplayBtn = document.getElementById("autoplayBtn");
     autoplayBtn.addEventListener("click", () => {
