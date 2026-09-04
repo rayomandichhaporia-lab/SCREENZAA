@@ -13,6 +13,9 @@ cp "$ROOT/index.html" "$OUTPUT/index.html"
 if [[ -d "$ROOT/assets" ]]; then
   cp -R "$ROOT/assets" "$OUTPUT/assets"
 fi
+if [[ -d "$ROOT/presence" ]]; then
+  cp -R "$ROOT/presence" "$OUTPUT/presence"
+fi
 
 cat "$ROOT"/.deploy/aadhaar/site.part* | base64 --decode > "$ARCHIVE"
 ACTUAL_SHA256="$(sha256sum "$ARCHIVE" | awk '{print $1}')"
@@ -26,4 +29,6 @@ rm -f "$ARCHIVE"
 
 test -f "$OUTPUT/aadhaar-qr-scanner/index.html"
 test -f "$OUTPUT/aadhaar-qr-scanner/app.bundle.js"
+test -f "$OUTPUT/presence/index.html"
+test -f "$OUTPUT/presence/final-v5/loader.js"
 echo "Prepared Vercel output at $OUTPUT"
