@@ -6,6 +6,11 @@
       "source": "/aadhaar-qr-scanner",
       "destination": "/aadhaar-qr-scanner/",
       "permanent": false
+    },
+    {
+      "source": "/presence",
+      "destination": "/presence/",
+      "permanent": false
     }
   ],
   "headers": [
@@ -27,6 +32,43 @@
         {
           "key": "Permissions-Policy",
           "value": "camera=(self), microphone=(), geolocation=()"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "no-referrer"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow,noarchive"
+        }
+      ]
+    },
+    {
+      "source": "/presence/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, max-age=0"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'none'; font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+        },
+        {
+          "key": "Cross-Origin-Opener-Policy",
+          "value": "same-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=()"
         },
         {
           "key": "Referrer-Policy",
