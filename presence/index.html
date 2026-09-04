@@ -6,18 +6,33 @@
 <meta name="theme-color" content="#f6f4ee">
 <meta name="robots" content="noindex,nofollow,noarchive">
 <meta name="description" content="Screenzaa Presence — see the digital identity the internet has quietly assembled about you.">
-<title>Screenzaa Presence — See your internet identity</title>
+<title>Screenzaa Presence — CEO Demo</title>
+<style>body{margin:0;background:#f6f4ee;color:#10120f;font-family:system-ui,-apple-system,Segoe UI,sans-serif}.boot{min-height:100vh;display:grid;place-items:center;padding:32px}.boot>div{max-width:520px;text-align:center}.ring{width:44px;height:44px;border:2px solid #d7dbd4;border-top-color:#147a5d;border-radius:50%;margin:0 auto 18px;animation:s .8s linear infinite}@keyframes s{to{transform:rotate(360deg)}}.boot p{color:#6a6f66;font-size:14px}</style>
 </head>
-<body style="margin:0;background:#f6f4ee">
-<noscript><main style="font-family:system-ui;padding:40px;max-width:700px;margin:auto"><h1>Screenzaa Presence</h1><p>This static demo requires JavaScript.</p></main></noscript>
-<script src="final-v5/part-00.js"></script>
-<script src="final-v5/part-01.js"></script>
-<script src="final-v5/part-02.js"></script>
-<script src="final-v5/part-03.js"></script>
-<script src="final-v5/part-04.js"></script>
-<script src="final-v5/part-05.js"></script>
-<script src="final-v5/part-06.js"></script>
-<script src="final-v5/part-07.js"></script>
-<script src="final-v5/loader.js"></script>
+<body>
+<div class="boot" id="boot"><div><div class="ring"></div><strong>Opening Screenzaa Presence</strong><p>Loading the static CEO demo…</p></div></div>
+<noscript><main class="boot"><div><h1>Screenzaa Presence</h1><p>This static demo requires JavaScript.</p></div></main></noscript>
+<script>window.__P=[];</script>
+<script src="final-v4/part-00.js?v=20260904-fix"></script>
+<script src="final-v4/part-01.js?v=20260904-fix"></script>
+<script src="final-v4/part-02.js?v=20260904-fix"></script>
+<script src="final-v4/part-03.js?v=20260904-fix"></script>
+<script>
+(async()=>{try{
+ if(!window.__P||window.__P.length!==4||window.__P.some(x=>!x)) throw new Error('Demo payload is incomplete');
+ const b64=window.__P.join('');
+ const bin=atob(b64);
+ const bytes=new Uint8Array(bin.length);
+ for(let i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
+ if(typeof DecompressionStream==='undefined') throw new Error('Your browser does not support the required built-in decompressor');
+ const ds=new DecompressionStream('gzip');
+ const html=await new Response(new Blob([bytes]).stream().pipeThrough(ds)).text();
+ if(!html||html.length<1000||!/<html/i.test(html)) throw new Error('Decoded demo was invalid');
+ document.open();document.write(html);document.close();
+}catch(e){
+ console.error(e);
+ document.body.innerHTML='<main style="min-height:100vh;display:grid;place-items:center;padding:32px;background:#f6f4ee;font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#10120f"><div style="max-width:560px;background:white;border:1px solid #e2e2db;border-radius:24px;padding:32px;box-shadow:0 18px 55px rgba(25,30,22,.08)"><h1 style="font-family:Georgia,serif;font-weight:500;margin:0 0 12px">Unable to open this demo</h1><p style="line-height:1.6;color:#686c63">The hosted payload did not load correctly. Please refresh once. If it still fails, use a current Chrome, Edge, Safari or Firefox browser.</p><button onclick="location.reload(true)" style="border:0;border-radius:999px;background:#10120f;color:white;padding:13px 18px;font-weight:700">Reload demo</button></div></main>';
+}})();
+</script>
 </body>
 </html>
